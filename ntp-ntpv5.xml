@@ -1488,7 +1488,7 @@ Tx  | 0  |    | t3'|      | 0  |    | t3 |      | 0  |    |t11'|
 
     </section>
 
-    <section title="Client Operation">
+    <section title="Client Operation" anchor="client-operation">
       <t>An NTPv5 client can use one or multiple servers. It has a separate
         association with each server. It makes periodic measurements of its
         offset and delay to the server. It can filter the measurements and
@@ -1807,6 +1807,28 @@ Tx  | 0  |    | t3'|      | 0  |    | t3 |      | 0  |    |t11'|
             S2C key.</t>
         </list>
       </t>
+
+      <t>For NTPv5, the Authentication NAK flag replaces the NTS NAK
+        Kiss-o'-Death code ("NTSN") specified in Section 5.7 of
+        <xref target="RFC8915"/>. If an NTS-protected request cannot be
+        authenticated, the server MUST drop it unless the request has the
+        Authentication NAK flag set. If the flag is set, the server SHOULD
+        respond with the same flag set. Such a response MUST echo the Client
+        Cookie and Unique Identifier from the request, MUST NOT contain an
+        NTS Cookie or NTS Authenticator and Encrypted Extension Fields, and
+        MUST have the same length as the request.</t>
+
+      <t>A client that requested an Authentication NAK MUST treat such an
+        unauthenticated response as an NTS NAK only if the Client Cookie and
+        Unique Identifier match an outstanding request and the response
+        contains no NTS Cookie or NTS Authenticator and Encrypted Extension
+        Fields. Otherwise, it MUST discard the response. This is an
+        exception to the authentication check in
+        <xref target="client-operation">Client Operation</xref>. The client
+        MUST NOT use the response for time synchronization. It SHOULD wait
+        until the next poll for a valid NTS-protected response and, if none
+        is received, initiate a new NTS-KE exchange, subject to the retry
+        limits in Section 4.2 of <xref target="RFC8915"/>.</t>
 
       <t>(Note to editor: remove this paragraph before publishing.) Client
         implementations of a draft of this specification MUST provide the
