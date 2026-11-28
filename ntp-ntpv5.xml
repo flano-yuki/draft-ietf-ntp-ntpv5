@@ -1789,6 +1789,18 @@ Tx  | 0  |    | t3'|      | 0  |    | t3 |      | 0  |    |t11'|
         specified for NTPv4 (i.e. NTPv4 New Cookie, NTPv4 Server Negotiation,
         and NTPv4 Port Negotiation) are reused for NTPv5.</t>
 
+      <t>If NTPv5 is offered as a Next Protocol, the NTS-KE request MUST
+        include exactly one AEAD Algorithm Negotiation record. A server
+        MUST NOT select NTPv5 unless it can select an AEAD algorithm
+        offered by the client. If NTPv5 is selected, the NTS-KE response
+        MUST include exactly one AEAD Algorithm Negotiation record
+        identifying the selected algorithm. Servers supporting NTS with
+        NTPv5 MUST support AEAD_AES_SIV_CMAC_256 (Numeric Identifier 15).</t>
+
+      <t>If NTPv5 is selected, the server MUST send at least one NTPv4 New
+        Cookie record and SHOULD send eight, as specified in Section 4.1.6
+        of <xref target="RFC8915"/>.</t>
+
       <t>The NTS extension fields specified for NTPv4 are compatible with
         NTPv5. No new extension fields are specified.</t>
 
